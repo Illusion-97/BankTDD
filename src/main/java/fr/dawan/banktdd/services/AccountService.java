@@ -1,11 +1,9 @@
 package fr.dawan.banktdd.services;
 
-import fr.dawan.banktdd.repositories.AccountRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import fr.dawan.banktdd.dtos.AccountDto;
 
-@Service
-@RequiredArgsConstructor
-public class AccountService {
-    private final AccountRepository repository;
+import java.util.List;
+
+public interface AccountService {
+    List<AccountDto> getAll();
 }
