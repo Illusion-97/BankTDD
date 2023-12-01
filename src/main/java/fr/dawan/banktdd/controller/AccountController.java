@@ -1,7 +1,7 @@
 package fr.dawan.banktdd.controller;
 
 import fr.dawan.banktdd.dtos.AccountDto;
-import fr.dawan.banktdd.models.DepositDto;
+import fr.dawan.banktdd.dtos.DepositDto;
 import fr.dawan.banktdd.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
