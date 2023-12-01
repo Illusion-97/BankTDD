@@ -190,4 +190,58 @@ class AccountServiceImplTest {
                 Arguments.of(1, List.of())
         );
     }
+
+    @Test
+    void depositNonExistingId() {
+        long nonExistingId = 0;
+        double amount = 100;
+
+        Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
+
+        assertThrows(NullPointerException.class, () -> service.deposit(nonExistingId, amount));
+    }
+
+    @Test
+    void depositExistingId() {
+        long existingId = 0;
+        double amount = 100;
+        double initAmount = 500;
+        Account account = new Account(existingId, initAmount);
+
+        Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(account));
+        Mockito.when(repository.save(account)).thenReturn(account);
+        // Mockito.doNothing().when(repository).save(account);
+
+        service.deposit(existingId, amount);
+        assertEquals(amount + initAmount, account.getBalance());
+    }
+
+    @ParameterizedTest
+    @MethodSource("depositProvider")
+    void depositParameterizedTest(long id, double amount, List<Account> accounts) {
+        Optional<Account> optionalAccount = accounts.stream().filter(account -> account.getId() == id).findFirst();
+        Mockito.when(repository.findById(id)).thenReturn(optionalAccount);
+
+        optionalAccount.ifPresentOrElse(
+                account -> {
+                    Mockito.when(repository.save(account)).thenReturn(account);
+                    double initAmount = account.getBalance();
+                    service.deposit(id, amount);
+                    assertEquals(amount + initAmount, account.getBalance());
+                },
+                () -> assertThrows(NullPointerException.class, () -> service.deposit(id, amount))
+        );
+    }
+
+    private static Stream<Arguments> depositProvider() {
+        return Stream.of(
+                Arguments.of(3, 500, List.of(
+                        new Account(1, 50),
+                        new Account(2, 500),
+                        new Account(3, 700),
+                        new Account(4, 800)
+                )),
+                Arguments.of(1, 100, List.of())
+        );
+    }
 }
