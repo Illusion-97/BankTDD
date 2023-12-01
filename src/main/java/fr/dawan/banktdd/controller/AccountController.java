@@ -4,6 +4,7 @@ import fr.dawan.banktdd.dtos.AccountDto;
 import fr.dawan.banktdd.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,5 +19,10 @@ public class AccountController {
     @GetMapping
     public List<AccountDto> getAll() {
         return service.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public AccountDto findById(@PathVariable long id) {
+        return service.findById(id).orElse(null);
     }
 }

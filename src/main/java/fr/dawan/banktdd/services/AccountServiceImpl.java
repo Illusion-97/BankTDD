@@ -10,6 +10,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,11 @@ public class AccountServiceImpl implements AccountService {
                 .stream()
                 .map(account -> DtoTools.convert(account, AccountDto.class))
                 .toList();
+    }
+
+    @Override
+    public Optional<AccountDto> findById(long id) {
+        return repository.findById(id).map(account -> DtoTools.convert(account, AccountDto.class));
     }
 
     @EventListener(ApplicationStartedEvent.class)
