@@ -9,4 +9,6 @@ public interface AccountService {
     List<AccountDto> getAll();
 
     Optional<AccountDto> findById(long id);
+
+    void deposit(long id, double amount);
 }

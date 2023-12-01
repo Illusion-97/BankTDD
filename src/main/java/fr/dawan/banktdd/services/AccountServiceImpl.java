@@ -30,6 +30,13 @@ public class AccountServiceImpl implements AccountService {
         return repository.findById(id).map(account -> DtoTools.convert(account, AccountDto.class));
     }
 
+    @Override
+    public void deposit(long id, double amount) {
+        Account account = repository.findById(id).orElseThrow(NullPointerException::new);
+        account.setBalance(account.getBalance() + amount);
+        repository.save(account);
+    }
+
     @EventListener(ApplicationStartedEvent.class)
     public void initAccounts() {
         System.out.println("\u001B[36mAccountServiceImpl.initAccounts\u001B[0m");
