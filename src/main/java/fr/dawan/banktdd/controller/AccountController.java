@@ -4,6 +4,7 @@ import fr.dawan.banktdd.dtos.AccountDto;
 import fr.dawan.banktdd.dtos.DepositDto;
 import fr.dawan.banktdd.services.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +16,15 @@ public class AccountController {
     private final AccountService service;
 
     @GetMapping
-    public List<AccountDto> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<AccountDto>> getAll() {
+        List<AccountDto> all = service.getAll();
+        if (all.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    public AccountDto findById(@PathVariable long id) {
-        return service.findById(id).orElse(null);
+    public ResponseEntity<AccountDto> findById(@PathVariable long id) {
+        return ResponseEntity.of(service.findById(id));
     }
 
     @PostMapping("/deposit")
